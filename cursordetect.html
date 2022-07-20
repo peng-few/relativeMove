@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        body{
+            background: #091226;
+            overflow: hidden;
+        }
+        img{
+            position: absolute;
+        }
+        .wrapper img{
+            max-width: 200px;
+        }
+        .second img{
+            max-width: 300px;
+        }
+        .top img{
+            max-width: 600px;
+        }
+        div{
+           position: absolute; 
+           width: 100vw;
+           height: 100vh;
+           transition: 1s cubic-bezier(0.65, 0.26, 0.63, 0.89)
+        }
+        div p{
+            position: absolute;
+        }
+    </style>
+    <div class="wrapper">
+        <img src="img/s1.png" alt="">
+        <img src="img/s2.png" alt="">
+    </div>
+    <div class="second">
+        <img src="img/s3.png" alt="">
+        <img src="img/s4.png" alt="">
+    </div>
+    <div class="top">
+        <img src="img/s5.png" alt="">
+        <img src="img/s6.png" alt="">
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>
+        const spaceInit = () => {
+            const planets = $('img');
+            let pageX = 0
+            let pageY = 0
+
+            for(let i = 0 ; i < planets.length ; i++) { 
+                const planet= $(planets).eq(i);
+
+                let left= Math.random()*70;
+                $(planet).css('left',left+"%");
+
+                const top = Math.random()*70;
+                $(planet).css('top',top+"%");
+            }
+        }
+
+        $(function() {
+            spaceInit();
+
+            let isFirstMove = true
+            let oldX;
+            let oldY;
+            $(document).on('mousemove',function(e){
+                if(isFirstMove === true) {
+                    oldX = e.pageX;
+                    oldY = e.pageY;      
+                    isFirstMove = false;
+                }   
+                var pageX = e.pageX - oldX;
+                var pageY = e.pageY - oldY;
+                
+                const layers = {
+                    '.wrapper' : 50,
+                    '.second': 30,
+                    '.top': 12
+                };
+
+                Object.keys(layers).map(layer => {
+                    const offsetX = -(pageX-$(layer).offset().left) / layers[layer];
+                    const offsetY = -(pageY-$(layer).offset().top) / layers[layer];
+                    $(layer).css('transform','translateX(' + offsetX + 'px) translateY(' + offsetY + 'px)');
+                })
+
+            })
+        })
+    </script>
+</body>
+</html>
